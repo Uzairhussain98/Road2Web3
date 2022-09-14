@@ -30,7 +30,7 @@ contract BuyMeACoffee {
     @param _message message of the cofee buyer 
     */
 
-    function BuyCoffee(string memory _name, string memory _message)
+    function buyCoffee(string memory _name, string memory _message)
         public
         payable
     {
@@ -45,14 +45,14 @@ contract BuyMeACoffee {
     /* 
     @dev send all the funds to the owner 
     */
-    function WithDrawTips() public {
+    function withdrawTips() public {
         require(owner.send(address(this).balance));
     }
 
     /* 
     @dev retrive all the memos stored on the blockchain
     */
-    function GetMemos() public view returns (Memo[] memory) {
+    function getMemos() public view returns (Memo[] memory) {
         return memos;
     }
 }
