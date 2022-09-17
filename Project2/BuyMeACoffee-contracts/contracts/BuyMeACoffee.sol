@@ -8,7 +8,7 @@ pragma solidity ^0.8.9;
 //0xCC4df539e1763C73dF88aAEEd5c5eEF718E05144
 
 contract BuyMeACoffee {
-    event NewMemo(address from, uint256 timestamp, string name, string message);
+    event NewMemo(address indexed from, uint256 timestamp, string name, string message);
 
     struct Memo {
         address from;
