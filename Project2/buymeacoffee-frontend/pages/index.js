@@ -3,6 +3,12 @@ import { ethers } from "ethers";
 import Head from 'next/head'
 import React, { useEffect, useState } from "react";
 import styles from '../styles/Home.module.css'
+import gif from '../styles/coffee.gif' 
+import coffee from '../styles/coffee.jpg' 
+import Image from "next/image";
+import { InfinitySpin  } from 'react-loader-spinner'
+
+
 
 export default function Home() {
   // Contract Address & ABI
@@ -14,6 +20,8 @@ export default function Home() {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [memos, setMemos] = useState([]);
+  const [buying, setBuying] = useState(false);
+
 
   const onNameChange = (event) => {
     setName(event.target.value);
@@ -48,8 +56,9 @@ export default function Home() {
 
       if (!ethereum) {
         console.log("please install MetaMask");
+        alert("Please Install Wallet")
       }
-
+      
       const accounts = await ethereum.request({
         method: 'eth_requestAccounts'
       });
@@ -73,12 +82,18 @@ export default function Home() {
           signer
         );
 
+        if ( name =="" || message == ""){
+          alert("Please Input Your Name And Message Properly")
+        }
+
+        else{
         console.log("buying coffee..")
         const coffeeTxn = await buyMeACoffee.buyCoffee(
           name ? name : "anon",
           message ? message : "Enjoy your coffee!",
           {value: ethers.utils.parseEther("0.001")}
         );
+        setBuying(true)
 
         await coffeeTxn.wait();
 
@@ -89,6 +104,8 @@ export default function Home() {
         // Clear the form fields.
         setName("");
         setMessage("");
+        setBuying(false);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -109,19 +126,28 @@ export default function Home() {
           signer
         );
 
+        if ( name == "" || message == ''){
+          alert("Please Input Your Name And Message Properly")
+        }
+
+        else{
         console.log("buying Large coffee..")
+        
         const coffeeTxn = await buyMeACoffee.buyCoffee(
           name ? name : "anon",
           message ? message : "Enjoy your coffee!",
           {value: ethers.utils.parseEther("0.005")}
         );
+        setBuying(true)
+
 
         await coffeeTxn.wait();
 
         console.log("mined ", coffeeTxn.hash);
 
         console.log("coffee purchased!");
-
+        setBuying(false)
+        }
         // Clear the form fields.
         setName("");
         setMessage("");
@@ -202,6 +228,30 @@ export default function Home() {
     }
   }, []);
   
+  if (buying){
+  return (
+    <div className={styles.loading}>
+      <Head>
+        <title>Buy Me A Coffee!</title>
+        <meta name="description" content="Tipping site" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <div className={styles.main}>
+      <InfinitySpin 
+        width='200'
+        color="yellow"
+/>
+
+        <h1>
+          Buying Coffee
+        </h1>
+    </div>
+    </div>
+    )
+  }
+
+
+  // MAIn Page
   return (
     <div className={styles.container}>
       <Head>
@@ -209,8 +259,14 @@ export default function Home() {
         <meta name="description" content="Tipping site" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
       <main className={styles.main}>
+      <Image
+      src={gif}
+      alt="Picture of the author"
+      width="350px"
+      height="300px"
+    />
+
         <h1 className={styles.title}>
           Buy me a coffee!
         </h1>
@@ -219,12 +275,13 @@ export default function Home() {
           <div className={styles.section}>
             <form className={styles.formm}>
               <div>
-                <label>
+              <label className={styles.label}>
                   Name
                 </label>
                 <br/>
                 
                 <input
+                  className={styles.inputfield}
                   id="name"
                   type="text"
                   placeholder="anon"
@@ -234,12 +291,13 @@ export default function Home() {
               </div>
               <br/>
               <div>
-                <label>
+                <label className={styles.label}>
                   Send Me A Message
                 </label>
                 <br/>
 
                 <textarea
+                className={styles.inputfield}
                   rows={3}
                   placeholder="Enjoy your coffee!"
                   id="message"
@@ -272,11 +330,11 @@ export default function Home() {
         )}
       </main>
 
-      {currentAccount && (<h1>Memos received</h1>)}
+      {currentAccount && (<h1 style={{color:"yellow"}}>Memos received</h1>)}
 
       {currentAccount && (memos.map((memo, idx) => {
         return (
-          <div key={idx} style={{border:"2px solid", "borderRadius":"5px", padding: "5px", margin: "5px"}}>
+          <div key={idx} style={{backgroundColor:"whitesmoke" , width: '300px',border:"2px solid", "borderRadius":"5px", padding: "5px", margin: "5px"}}>
             <p style={{"fontWeight":"bold"}}>"{memo.message}"</p>
             <p>From: {memo.name} at {memo.timestamp.toString()}</p>
           </div>
@@ -289,9 +347,10 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Created by @UzairHussain by using solidity and hardhat deployed on ethereum testnet!
+          Created by @UzairHussain by using Solidity, Hardhat and Alchemy deployed on ethereum testnet!
         </a>
       </footer>
     </div>
   )
+    
 }
