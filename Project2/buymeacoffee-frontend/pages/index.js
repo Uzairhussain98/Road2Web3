@@ -7,6 +7,8 @@ import gif from '../styles/coffee.gif'
 import coffee from '../styles/coffee.jpg' 
 import Image from "next/image";
 import { InfinitySpin  } from 'react-loader-spinner'
+import { Fade } from "react-awesome-reveal";
+
 
 
 
@@ -332,12 +334,14 @@ export default function Home() {
 
       {currentAccount && (<h1 style={{color:"yellow"}}>Memos received</h1>)}
 
-      {currentAccount && (memos.map((memo, idx) => {
+      {currentAccount && (memos.slice(0,5).reverse().map((memo, idx) => {
         return (
-          <div key={idx} style={{backgroundColor:"whitesmoke" , width: '300px',border:"2px solid", "borderRadius":"5px", padding: "5px", margin: "5px"}}>
+          <Fade direction="up" duration={2000} >
+          <div key={idx} style={{backgroundColor:"whitesmoke" , width: '400px',border:"2px solid", "borderRadius":"5px", padding: "5px", margin: "5px"}}>
             <p style={{"fontWeight":"bold"}}>"{memo.message}"</p>
             <p>From: {memo.name} at {memo.timestamp.toString()}</p>
           </div>
+          </Fade>
         )
       }))}
 
