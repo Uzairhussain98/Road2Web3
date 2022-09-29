@@ -286,7 +286,7 @@ export default function Home() {
                   className={styles.inputfield}
                   id="name"
                   type="text"
-                  placeholder="anon"
+                  placeholder="Name"
                   value={name}
                   onChange={onNameChange}
                   />
@@ -334,11 +334,11 @@ export default function Home() {
 
       {currentAccount && (<h1 style={{color:"yellow"}}>Memos received</h1>)}
 
-      {currentAccount && (memos.slice(0,5).reverse().map((memo, idx) => {
+      {currentAccount && (memos.slice(5).reverse().map((memo, idx) => {
         return (
-          <Fade direction="up" duration={2000} >
+          <Fade direction="up" duration={2000} key={idx} >
           <div key={idx} style={{backgroundColor:"whitesmoke" , width: '400px',border:"2px solid", "borderRadius":"5px", padding: "5px", margin: "5px"}}>
-            <p style={{"fontWeight":"bold"}}>"{memo.message}"</p>
+            <p style={{"fontWeight":'bold'}}>`{memo.message}`</p>
             <p>From: {memo.name} at {memo.timestamp.toString()}</p>
           </div>
           </Fade>
@@ -351,7 +351,7 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Created by @UzairHussain by using Solidity, Hardhat and Alchemy deployed on ethereum testnet!
+          Created by @UzairHussain by using Solidity, Hardhat and Alchemy deployed on Goerli testnet!
         </a>
       </footer>
     </div>
